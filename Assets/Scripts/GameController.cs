@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Text maxUnitTxt;
     [SerializeField] private Animator packsBoardAnim;
 
+    private bool isLock = false;
     private bool displayPack = true;
 
     private int gold = 0;
@@ -38,7 +39,23 @@ public class GameController : MonoBehaviour {
                 packsBoardAnim.Play("DisplayPackBoard");
             else
                 packsBoardAnim.Play("RemovePackBoard");
-        } else if (Input.GetKeyDown(KeyCode.R) && gold >= 2)
+        } else if (Input.GetKeyDown(KeyCode.R))
+        {
+            Reroll();
+        } else if (Input.GetKeyDown(KeyCode.T))
+        {
+            GainEXP();
+        }
+    }
+
+    public void LockPacks()
+    {
+        isLock = !isLock;
+    }
+
+    public void Reroll()
+    {
+        if (!isLock && gold >= 2)
         {
             SetPieceSelectors();
             if (!displayPack)
@@ -47,10 +64,6 @@ public class GameController : MonoBehaviour {
                 packsBoardAnim.Play("DisplayPackBoard");
             }
             BuySellPiece(-2);
-        } else if (Input.GetKeyDown(KeyCode.T) && gold >= 5)
-        {
-            GainEXP();
-            BuySellPiece(-5);
         }
     }
 
@@ -82,7 +95,10 @@ public class GameController : MonoBehaviour {
 
     private void GainEXP()
     {
-
+        if(gold >= 5)
+        {
+            BuySellPiece(-5);
+        }
     }
 
     public void NextRound()
