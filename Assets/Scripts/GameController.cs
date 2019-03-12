@@ -7,20 +7,25 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Text goldAmt;
     [SerializeField] private Text roundsTxt;
     [SerializeField] private Text maxUnitTxt;
+    [SerializeField] private Text levelTxt;
     [SerializeField] private Animator packsBoardAnim;
 
     private bool isLock = false;
     private bool displayPack = true;
 
-    private int gold = 0;
     private int level = 1;
+    private int exp = 0;
+    private int expCap = 3;
+    private float expMod = 1.15f;
+
+    private int gold = 0;
     private int rounds = 1;
 
-    private int maxUnits = 1;
     private int currUnits = 0;
 
     private void Start()
     {
+        levelTxt.text = "1";
         maxUnitTxt.text = "0/1";
 
         BuySellPiece(1);
@@ -44,7 +49,7 @@ public class GameController : MonoBehaviour {
             Reroll();
         } else if (Input.GetKeyDown(KeyCode.T))
         {
-            GainEXP();
+            GainEXP(true);
         }
     }
 
@@ -78,13 +83,13 @@ public class GameController : MonoBehaviour {
 
     public bool CanPlayUnit()
     {
-        return currUnits < maxUnits;
+        return currUnits < level;
     }
 
     public void SetPlayedUnits(int amount)
     {
         currUnits += amount;
-        maxUnitTxt.text = currUnits + "/" + maxUnits;
+        maxUnitTxt.text = currUnits + "/" + level;
     }
 
     public void BuySellPiece(int amount)
@@ -93,12 +98,21 @@ public class GameController : MonoBehaviour {
         goldAmt.text = gold.ToString();
     }
 
-    private void GainEXP()
+    private void GainEXP(bool manualGain)
     {
-        if(gold >= 5)
+        if(gold >= 5 && manualGain)
         {
             BuySellPiece(-5);
         }
+        exp += 5;
+        if(exp >= expCap)
+        {
+            exp -= expCap;
+            level++;
+            float t = Mathf.Pow(expMod, level);
+            expCap = (int)Mathf.Floor(3 * t);
+        }
+
     }
 
     public void NextRound()
