@@ -31,57 +31,79 @@ public class SpaceSelect : MonoBehaviour {
             selection = SelectPiece.Idling;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        RaycastHit hitInfo = new RaycastHit();
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
-            RaycastHit hitInfo = new RaycastHit();
-            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+            string hitTag = hitInfo.transform.tag;
 
-            if (hit)
+            if (Input.GetMouseButtonDown(0))
             {
-                string hitTag = hitInfo.transform.tag;
                 if (hitTag.Equals("piece") && !pieceSelected)
                 {
-                    if (selection == SelectPiece.Returning)
-                    {
-                        bench.AlocatePiece(hitInfo.transform.GetComponent<PiecePosition>());
-                    } else if (selection == SelectPiece.Moving)
-                    {
-                        selectedPiece = hitInfo.transform;
-                        pieceSelected = true;
-                    } else if (selection == SelectPiece.Selling)
-                    {
-                        if (hitInfo.transform.GetComponent<PiecePosition>().GetAlocatedSpaceTag().Equals("space"))
-                            controller.SetPlayedUnits(-1);
-
-                        int amount = hitInfo.transform.GetComponent<PiecePosition>().GetSellingPrice();
-                        controller.BuySellPiece(amount);
-                        Destroy(hitInfo.transform.gameObject);
-
-                    }
-                    selection = SelectPiece.Idling;
-
-                } else if(pieceSelected && ((hitTag.Equals("space") && controller.CanPlayUnit()) || hitTag.Equals("benchSpace")))
+                    ManipulatePiece(hitInfo.transform);
+                }
+                else if (pieceSelected && hitTag.Equals("space"))
                 {
-                    string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
-
-                    if(hitTag.Equals("space") && selectedPiece.GetComponent<PiecePosition>().RelocatePiece(hitInfo.transform))
-                    {
-                        pieceSelected = false;
-                        selectedPiece = null;
-
-                        if(lastPlacedSpace.Equals("benchSpace"))
-                            controller.SetPlayedUnits(1);
-                    } else if(hitTag.Equals("benchSpace") && selectedPiece.GetComponent<PiecePosition>().RelocatePiece(hitInfo.transform))
-                    {
-                        pieceSelected = false;
-                        selectedPiece = null;
-
-                        if(lastPlacedSpace.Equals("space"))
-                            controller.SetPlayedUnits(-1);
-                    }
-                    
-                } 
+                    UseSpace(hitInfo.transform);
+                }
+                else if (pieceSelected && hitTag.Equals("benchSpace"))
+                {
+                    UseBench(hitInfo.transform);
+                }
             }
         }
 	}
+
+    private void ManipulatePiece(Transform piece)
+    {
+        PiecePosition pieceScript = piece.transform.GetComponent<PiecePosition>();
+        if (selection == SelectPiece.Returning)
+        {
+            bench.AlocatePiece(pieceScript);
+        }
+        else if (selection == SelectPiece.Moving)
+        {
+            selectedPiece = piece.transform;
+            pieceSelected = true;
+        }
+        else if (selection == SelectPiece.Selling)
+        {
+            if (pieceScript.GetAlocatedSpaceTag().Equals("space"))
+                controller.SetPlayedUnits(-1);
+
+            int amount = pieceScript.GetSellingPrice();
+            controller.BuySellPiece(amount);
+            Destroy(piece.transform.gameObject);
+
+        }
+        selection = SelectPiece.Idling;
+    }
+
+    private void UseBench(Transform bench)
+    {
+        string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
+
+        if (selectedPiece.GetComponent<PiecePosition>().RelocatePiece(bench))
+        {
+            pieceSelected = false;
+            selectedPiece = null;
+
+            if (lastPlacedSpace.Equals("space"))
+                controller.SetPlayedUnits(-1);
+        }
+    }
+
+    private void UseSpace(Transform space)
+    {
+        string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
+
+        if ((lastPlacedSpace.Equals("space") || controller.CanPlayUnit()) && selectedPiece.GetComponent<PiecePosition>().RelocatePiece(space))
+        {
+            pieceSelected = false;
+            selectedPiece = null;
+
+            if (lastPlacedSpace.Equals("benchSpace"))
+                controller.SetPlayedUnits(1);
+        }
+    }
 }

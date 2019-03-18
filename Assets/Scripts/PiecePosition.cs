@@ -7,6 +7,12 @@ public class PiecePosition : MonoBehaviour {
     [SerializeField] private PieceDetail lvl3;
     [SerializeField] private PlaySpace alocatedSpace;
     [SerializeField] private string pieceName;
+    private ParticleSystem system;
+
+    private void Start()
+    {
+        system = transform.GetChild(0).GetComponent<ParticleSystem>();
+    }
 
     public bool RelocatePiece(Transform newSpace)
     {
@@ -21,11 +27,21 @@ public class PiecePosition : MonoBehaviour {
             alocatedSpace.AddPiece(null);
         }
 
-        transform.position = newSpace.position;
+        transform.position = newSpace.position + new Vector3(0,0.5f,0);
         alocatedSpace = newSpace.GetComponent<PlaySpace>();
         alocatedSpace.AddPiece(this);
 
         return true;
+    }
+
+    private void OnMouseEnter()
+    {
+        system.Play();
+    }
+
+    private void OnMouseExit()
+    {
+        system.Stop();
     }
 
     public void UpgradePiece()
