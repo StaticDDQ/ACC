@@ -19,13 +19,13 @@ public class SpaceSelect : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            selection = SelectPiece.Returning;
+            Return();
         } else if (Input.GetKeyDown(KeyCode.Q))
         {
-            selection = SelectPiece.Moving;
+            Move();
         } else if (Input.GetKeyDown(KeyCode.E))
         {
-            selection = SelectPiece.Selling;
+            Sell();
         } else if (Input.GetKeyDown(KeyCode.Escape))
         {
             selection = SelectPiece.Idling;
@@ -105,5 +105,20 @@ public class SpaceSelect : MonoBehaviour {
             if (lastPlacedSpace.Equals("benchSpace"))
                 controller.SetPlayedUnits(1);
         }
+    }
+
+    public void Move()
+    {
+        selection = SelectPiece.Moving;
+    }
+
+    public void Return()
+    {
+        selection = SelectPiece.Returning;
+    }
+
+    public void Sell()
+    {
+        selection = SelectPiece.Selling;
     }
 }

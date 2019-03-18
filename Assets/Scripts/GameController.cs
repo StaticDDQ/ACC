@@ -98,7 +98,7 @@ public class GameController : MonoBehaviour {
         goldAmt.text = gold.ToString();
     }
 
-    private void GainEXP(bool manualGain)
+    public void GainEXP(bool manualGain)
     {
         if(gold >= 5 && manualGain)
         {
