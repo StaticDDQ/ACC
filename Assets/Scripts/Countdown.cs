@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Countdown : MonoBehaviour
@@ -23,14 +21,20 @@ public class Countdown : MonoBehaviour
         if(timer >= 0.0f && canCount)
         {
             timer -= Time.deltaTime;
-            countdownText.text = timer.ToString("F");
+            countdownText.text = (int)timer + "";
         } else if(timer <= 0.0f && !doOnce)
         {
             canCount = false;
             doOnce = true;
-            countdownText.text = "0.00";
+            countdownText.text = "0";
             timer = 0.0f;
+            NextPhase();
         }
+    }
+
+    private void NextPhase()
+    {
+
     }
 
     public void ResetTimer()

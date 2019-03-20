@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
+    [SerializeField] private Transform effect;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotSpeed = 2f;
     [SerializeField] private Image healthBar;
@@ -47,6 +48,7 @@ public class PlayerControl : MonoBehaviour
             playerRot.x = 0;
             playerRot.z = 0;
             isMoving = true;
+            Instantiate(effect, targetPos, effect.rotation);
         }
     }
 
