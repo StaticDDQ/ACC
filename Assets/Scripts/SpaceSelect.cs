@@ -59,6 +59,10 @@ public class SpaceSelect : MonoBehaviour {
         PiecePosition pieceScript = piece.transform.GetComponent<PiecePosition>();
         if (selection == SelectPiece.Returning)
         {
+            if (piece.GetComponent<PiecePosition>().GetAlocatedSpaceTag().Equals("space"))
+            {
+                controller.SetPlayedUnits(-1);
+            }
             bench.AlocatePiece(pieceScript);
         }
         else if (selection == SelectPiece.Moving)

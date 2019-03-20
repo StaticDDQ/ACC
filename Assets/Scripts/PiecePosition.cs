@@ -27,7 +27,7 @@ public class PiecePosition : MonoBehaviour {
             alocatedSpace.AddPiece(null);
         }
 
-        transform.position = newSpace.position + new Vector3(0,0.5f,0);
+        transform.position = newSpace.position + new Vector3(0,1f,0);
         alocatedSpace = newSpace.GetComponent<PlaySpace>();
         alocatedSpace.AddPiece(this);
 

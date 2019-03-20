@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
@@ -8,6 +6,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotSpeed = 2f;
     [SerializeField] private Image healthBar;
+    [SerializeField] private Text healthText;
     private Rigidbody rb;
     private int health = 100;
 
@@ -20,6 +19,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        healthText.text = "100%";
     }
 
     // Update is called once per frame
@@ -65,6 +65,7 @@ public class PlayerControl : MonoBehaviour
     {
         health -= dmg;
         healthBar.fillAmount = health / 100f;
+        healthText.text = health + "%";
         if(health <= 0)
         {
             Destroy(gameObject);
