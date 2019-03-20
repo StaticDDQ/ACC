@@ -16,7 +16,7 @@ public class SpaceSelect : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
+        
         if (Input.GetKeyDown(KeyCode.W))
         {
             Return();
@@ -52,7 +52,7 @@ public class SpaceSelect : MonoBehaviour {
                 }
             }
         }
-	}
+    }
 
     private void ManipulatePiece(Transform piece)
     {
@@ -67,7 +67,7 @@ public class SpaceSelect : MonoBehaviour {
         }
         else if (selection == SelectPiece.Moving)
         {
-            selectedPiece = piece.transform;
+            selectedPiece = piece;
             pieceSelected = true;
         }
         else if (selection == SelectPiece.Selling)
@@ -77,7 +77,7 @@ public class SpaceSelect : MonoBehaviour {
 
             int amount = pieceScript.GetSellingPrice();
             controller.BuySellPiece(amount);
-            Destroy(piece.transform.gameObject);
+            Destroy(piece.gameObject);
 
         }
         selection = SelectPiece.Idling;
@@ -101,7 +101,7 @@ public class SpaceSelect : MonoBehaviour {
     {
         string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
 
-        if ((lastPlacedSpace.Equals("space") || controller.CanPlayUnit()) && selectedPiece.GetComponent<PiecePosition>().RelocatePiece(space))
+        if (selectedPiece.GetComponent<PiecePosition>().RelocatePiece(space))
         {
             pieceSelected = false;
             selectedPiece = null;

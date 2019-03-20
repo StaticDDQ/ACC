@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float maxY;
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
 
         Vector3 pos = transform.position;

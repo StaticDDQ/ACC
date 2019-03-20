@@ -3,7 +3,7 @@
 public class PlaySpace : MonoBehaviour {
 
     [SerializeField] private SpaceController controller;
-    [SerializeField] private PiecePosition occupiedPiece;
+    [SerializeField] private GameObject occupiedPiece;
     private GameObject highlightPanel;
 
     private void Start()
@@ -11,7 +11,7 @@ public class PlaySpace : MonoBehaviour {
         highlightPanel = transform.GetChild(0).gameObject;
     }
 
-    public void AddPiece(PiecePosition newPiece)
+    public void AddPiece(GameObject newPiece)
     {
         occupiedPiece = newPiece;
 
@@ -21,7 +21,7 @@ public class PlaySpace : MonoBehaviour {
         }
     }
 
-    public PiecePosition GetPiece()
+    public GameObject GetPiece()
     {
         return occupiedPiece;
     }

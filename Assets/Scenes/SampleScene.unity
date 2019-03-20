@@ -937,7 +937,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: {fileID: 1617553709}
   bench: {fileID: 1847835913}
-  controller: {fileID: 0}
+  controller: {fileID: 534669907}
 --- !u!1 &87918627
 GameObject:
   m_ObjectHideFlags: 0
@@ -4678,7 +4678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: {fileID: 124955704}
   bench: {fileID: 1847835913}
-  controller: {fileID: 0}
+  controller: {fileID: 534669907}
 --- !u!1 &597035595
 GameObject:
   m_ObjectHideFlags: 0
@@ -7929,7 +7929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: {fileID: 473800788}
   bench: {fileID: 1847835913}
-  controller: {fileID: 0}
+  controller: {fileID: 534669907}
 --- !u!1 &975689109
 GameObject:
   m_ObjectHideFlags: 0
@@ -10637,7 +10637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: {fileID: 1635688702}
   bench: {fileID: 1847835913}
-  controller: {fileID: 0}
+  controller: {fileID: 534669907}
 --- !u!1 &1429856482
 GameObject:
   m_ObjectHideFlags: 0
@@ -14085,7 +14085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: {fileID: 1376182640}
   bench: {fileID: 1847835913}
-  controller: {fileID: 0}
+  controller: {fileID: 534669907}
 --- !u!1 &1931674026
 GameObject:
   m_ObjectHideFlags: 0

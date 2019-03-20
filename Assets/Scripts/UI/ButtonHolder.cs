@@ -23,12 +23,17 @@ public class ButtonHolder : MonoBehaviour {
         if(piece != null && controller.GetGold() >= price)
         {
             var obj = Instantiate(piece);
-            bench.AlocatePiece(obj.GetComponent<PiecePosition>());
 
-            piece = null;
-            desc.text = "";
-            GetComponent<Button>().image = null;
-            controller.BuySellPiece(-price);
+            if (bench.AlocatePiece(obj.GetComponent<PiecePosition>()))
+            {
+                piece = null;
+                desc.text = "";
+                GetComponent<Button>().image = null;
+                controller.BuySellPiece(-price);
+            } else
+            {
+                Destroy(obj);
+            }
         }
     }
 }

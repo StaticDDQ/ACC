@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
         levelTxt.text = "1";
         maxUnitTxt.text = "0/1";
 
-        BuySellPiece(1);
+        BuySellPiece(2);
 
         SetPieceSelectors();
 
@@ -81,9 +81,9 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public bool CanPlayUnit()
+    public int ExcessUnits()
     {
-        return currUnits < level;
+        return currUnits - level;
     }
 
     public void SetPlayedUnits(int amount)

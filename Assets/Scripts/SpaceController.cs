@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SpaceController : MonoBehaviour {
@@ -19,14 +18,14 @@ public class SpaceController : MonoBehaviour {
         }
     }
 
-    public void PieceControl(PiecePosition piece)
+    public void PieceControl(GameObject piece)
     {
         bool noChanges = true;
-        PiecePosition copy1 = null;
+        GameObject copy1 = null;
 
         foreach (PlaySpace space in spaces)
         {
-            if (space.GetPiece() != null && space.GetPiece().GetName().Equals(piece.GetName()) && space.GetPiece() != piece)
+            if (space.GetPiece() != null && space.GetPiece().name.Equals(piece.name) && space.GetPiece() != piece)
             {
                 if (copy1 == null)
                 {
@@ -34,9 +33,9 @@ public class SpaceController : MonoBehaviour {
                 }
                 else
                 {
-                    copy1.RemovePiece();
-                    space.GetPiece().RemovePiece();
-                    piece.UpgradePiece();
+                    Destroy(copy1);
+                    Destroy(space.GetPiece());
+                    piece.GetComponent<PiecePosition>().UpgradePiece();
                     noChanges = false;
                     break;
                 }
@@ -45,5 +44,10 @@ public class SpaceController : MonoBehaviour {
 
         if (!noChanges)
             PieceControl(piece);
+    }
+
+    public List<PlaySpace> GetSpaces()
+    {
+        return this.spaces;
     }
 }
