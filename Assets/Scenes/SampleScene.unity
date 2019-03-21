@@ -8312,6 +8312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01ae7ab968def748ae04655d334653d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCam: {fileID: 534669904}
   effect: {fileID: 5389895699728653743, guid: 26c47fdf5682f6b419798657b4e3c1f6, type: 3}
   moveSpeed: 5
   rotSpeed: 10

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
+    [SerializeField] private Camera playerCam;
     [SerializeField] private Transform effect;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotSpeed = 2f;
@@ -36,7 +37,7 @@ public class PlayerControl : MonoBehaviour
 
     private void SetTargetPosition()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = playerCam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if(Physics.Raycast(ray, out hit, 1000))
