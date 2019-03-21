@@ -6,7 +6,6 @@ public enum Phase { Build, Prepare, Play }
 public class PhaseController : MonoBehaviour
 {
     public static PhaseController instance;
-    private Phase currPhase = Phase.Build;
     [SerializeField] private List<PreparePhase> players;
 
     // Start is called before the first frame update
@@ -45,6 +44,5 @@ public class PhaseController : MonoBehaviour
                 }
                 break;
         }
-        currPhase = nextPhase;
     }
 }

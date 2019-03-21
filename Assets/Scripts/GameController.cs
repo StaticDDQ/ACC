@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Animator packsBoardAnim;
 
     private bool isLock = false;
-    private bool displayPack = true;
+    private bool displayPack = false;
 
     private int health = 100;
 
@@ -121,11 +121,12 @@ public class GameController : MonoBehaviour {
 
     public void GainEXP(bool manualGain)
     {
-        if(gold >= 5 && manualGain)
+        exp += 1;
+        if (gold >= 5 && manualGain)
         {
             BuySellPiece(-5);
+            exp += 4;
         }
-        exp += 5;
         if(exp >= expCap)
         {
             exp -= expCap;

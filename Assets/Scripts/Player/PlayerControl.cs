@@ -7,18 +7,11 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Transform effect;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotSpeed = 2f;
-    private Rigidbody rb;
 
     private Vector3 targetPos;
     private Vector3 lookAtTarget;
     private Quaternion playerRot;
     private bool isMoving = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     // Update is called once per frame
     void Update()
