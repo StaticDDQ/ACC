@@ -2,7 +2,9 @@
 
 public class SpaceSelect : MonoBehaviour {
 
+    [SerializeField] private Camera cam;
     [SerializeField] private BenchPlacement bench;
+    private bool canControl = true;
     private GameController controller;
     private bool pieceSelected = false;
     private Transform selectedPiece;
@@ -32,12 +34,12 @@ public class SpaceSelect : MonoBehaviour {
         }
 
         RaycastHit hitInfo = new RaycastHit();
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
+        if (Input.GetMouseButtonDown(0))
         {
-            string hitTag = hitInfo.transform.tag;
-
-            if (Input.GetMouseButtonDown(0))
+            if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hitInfo))
             {
+                string hitTag = hitInfo.transform.tag;
+
                 if (hitTag.Equals("piece") && !pieceSelected)
                 {
                     ManipulatePiece(hitInfo.transform);
@@ -57,7 +59,7 @@ public class SpaceSelect : MonoBehaviour {
     private void ManipulatePiece(Transform piece)
     {
         PiecePosition pieceScript = piece.transform.GetComponent<PiecePosition>();
-        if (selection == SelectPiece.Returning)
+        if (selection == SelectPiece.Returning && canControl)
         {
             if (piece.GetComponent<PiecePosition>().GetAlocatedSpaceTag().Equals("space"))
             {
@@ -65,7 +67,7 @@ public class SpaceSelect : MonoBehaviour {
             }
             bench.AlocatePiece(pieceScript);
         }
-        else if (selection == SelectPiece.Moving)
+        else if (selection == SelectPiece.Moving && canControl)
         {
             selectedPiece = piece;
             pieceSelected = true;
@@ -85,12 +87,12 @@ public class SpaceSelect : MonoBehaviour {
 
     private void UseBench(Transform bench)
     {
-        string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
-
         if (selectedPiece.GetComponent<PiecePosition>().RelocatePiece(bench))
         {
             pieceSelected = false;
             selectedPiece = null;
+
+            string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
 
             if (lastPlacedSpace.Equals("space"))
                 controller.SetPlayedUnits(-1);
@@ -124,5 +126,15 @@ public class SpaceSelect : MonoBehaviour {
     public void Sell()
     {
         selection = SelectPiece.Selling;
+    }
+
+    public void DisableUnitControl(bool isDisabled)
+    {
+        canControl = isDisabled;
+        if (!canControl)
+        {
+            selectedPiece = null;
+            pieceSelected = false;
+        }
     }
 }

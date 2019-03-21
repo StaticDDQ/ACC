@@ -5,7 +5,7 @@ public class PiecePosition : MonoBehaviour {
     [SerializeField] private PieceDetail lvl1;
     [SerializeField] private PieceDetail lvl2;
     [SerializeField] private PieceDetail lvl3;
-    [SerializeField] private PlaySpace alocatedSpace;
+    private PlaySpace alocatedSpace;
     private ParticleSystem system;
 
     private void Start()
@@ -53,9 +53,9 @@ public class PiecePosition : MonoBehaviour {
         return 1;
     }
 
-    public PieceDetail GetLvl1Detail()
+    public PieceDetail GetPieceDetail()
     {
-        return this.lvl1;
+        return lvl1;
     }
 
     public string GetAlocatedSpaceTag()

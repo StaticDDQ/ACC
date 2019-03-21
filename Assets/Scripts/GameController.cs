@@ -8,10 +8,14 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Text roundsTxt;
     [SerializeField] private Text maxUnitTxt;
     [SerializeField] private Text levelTxt;
+    [SerializeField] private Image healthBar;
+    [SerializeField] private Text healthText;
     [SerializeField] private Animator packsBoardAnim;
 
     private bool isLock = false;
     private bool displayPack = true;
+
+    private int health = 100;
 
     private int level = 1;
     private int exp = 0;
@@ -19,20 +23,17 @@ public class GameController : MonoBehaviour {
     private float expMod = 1.15f;
 
     private int gold = 0;
-    private int rounds = 1;
+    private int rounds = 0;
 
     private int currUnits = 0;
 
     private void Start()
     {
         levelTxt.text = "1";
+        healthText.text = "100%";
         maxUnitTxt.text = "0/1";
 
-        BuySellPiece(2);
-
-        SetPieceSelectors();
-
-        packsBoardAnim.Play("DisplayPackBoard");
+        NextRound();
     }
 
     private void Update()
@@ -46,10 +47,21 @@ public class GameController : MonoBehaviour {
                 packsBoardAnim.Play("RemovePackBoard");
         } else if (Input.GetKeyDown(KeyCode.R))
         {
-            Reroll();
+            Reroll(true);
         } else if (Input.GetKeyDown(KeyCode.T))
         {
             GainEXP(true);
+        }
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        health -= dmg;
+        healthBar.fillAmount = health / 100f;
+        healthText.text = health + "%";
+        if (health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -58,9 +70,9 @@ public class GameController : MonoBehaviour {
         isLock = !isLock;
     }
 
-    public void Reroll()
+    public void Reroll(bool manualCommand)
     {
-        if (!isLock && gold >= 2)
+        if (!isLock || (manualCommand && gold >= 2))
         {
             SetPieceSelectors();
             if (!displayPack)
@@ -68,7 +80,9 @@ public class GameController : MonoBehaviour {
                 displayPack = true;
                 packsBoardAnim.Play("DisplayPackBoard");
             }
-            BuySellPiece(-2);
+
+            if(manualCommand)
+                BuySellPiece(-2);
         }
     }
 
@@ -90,6 +104,13 @@ public class GameController : MonoBehaviour {
     {
         currUnits += amount;
         maxUnitTxt.text = currUnits + "/" + level;
+        if(currUnits > level)
+        {
+            maxUnitTxt.color = Color.red;
+        } else
+        {
+            maxUnitTxt.color = Color.white;
+        }
     }
 
     public void BuySellPiece(int amount)
@@ -109,16 +130,25 @@ public class GameController : MonoBehaviour {
         {
             exp -= expCap;
             level++;
+            levelTxt.text = level + "";
+
             float t = Mathf.Pow(expMod, level);
             expCap = (int)Mathf.Floor(3 * t);
         }
-
     }
 
     public void NextRound()
     {
-        roundsTxt.text = (rounds++).ToString();
+        roundsTxt.text = (++rounds).ToString();
+        Reroll(false);
 
+        if (rounds < 6)
+            BuySellPiece(rounds);
+        else
+            BuySellPiece(5);
+
+        if (rounds > 1)
+            GainEXP(false);
     }
 
     public int GetGold()

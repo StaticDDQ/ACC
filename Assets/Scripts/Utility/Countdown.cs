@@ -1,46 +1,54 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class Countdown : MonoBehaviour
 {
-    [SerializeField] private Text countdownText;
+    public static Countdown instance;
+
     [SerializeField] private float minTimer;
+    private Phase currPhase = Phase.Build;
 
-    private float timer;
-    private bool canCount = true;
-    private bool doOnce = false;
+    public float timer;
 
-    private void Start()
+    private void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this);
         timer = minTimer;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if(timer >= 0.0f && canCount)
+        if(timer >= 0.0f)
         {
             timer -= Time.deltaTime;
-            countdownText.text = (int)timer + "";
-        } else if(timer <= 0.0f && !doOnce)
+        } else if(timer < 0.0f)
         {
-            canCount = false;
-            doOnce = true;
-            countdownText.text = "0";
             timer = 0.0f;
-            NextPhase();
+
+            switch (currPhase)
+            {
+                case Phase.Build:
+                    currPhase = Phase.Prepare;
+                    ResetTimer(5.0f);
+                    break;
+                case Phase.Prepare:
+                    currPhase = Phase.Play;
+                    ResetTimer(30.0f);
+                    break;
+                case Phase.Play:
+                    currPhase = Phase.Build;
+                    ResetTimer(30.0f);
+                    break;
+            }
+            PhaseController.instance.NextPhase(currPhase);
         }
     }
 
-    private void NextPhase()
+    private void ResetTimer(float newTimer)
     {
-
-    }
-
-    public void ResetTimer()
-    {
-        timer = minTimer;
-        canCount = true;
-        doOnce = false;
+        timer = newTimer;
     }
 }

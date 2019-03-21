@@ -25,16 +25,18 @@ public class SpaceController : MonoBehaviour {
 
         foreach (PlaySpace space in spaces)
         {
-            if (space.GetPiece() != null && space.GetPiece().name.Equals(piece.name) && space.GetPiece() != piece)
+            var activePiece = space.GetPiece();
+
+            if (activePiece != null && activePiece.name.Equals(piece.name) && activePiece != piece)
             {
                 if (copy1 == null)
                 {
-                    copy1 = space.GetPiece();
+                    copy1 = activePiece;
                 }
                 else
                 {
                     Destroy(copy1);
-                    Destroy(space.GetPiece());
+                    Destroy(activePiece);
                     piece.GetComponent<PiecePosition>().UpgradePiece();
                     noChanges = false;
                     break;

@@ -2,15 +2,17 @@
 
 public class PlaySpace : MonoBehaviour {
 
-    [SerializeField] private SpaceController controller;
+    private SpaceController controller;
     [SerializeField] private GameObject occupiedPiece;
     private GameObject highlightPanel;
 
     private void Start()
     {
         highlightPanel = transform.GetChild(0).gameObject;
+        controller = transform.parent.GetComponent<SpaceController>();
     }
 
+    // Assign piece to this space, afterwards notify parent if piece can be evolved
     public void AddPiece(GameObject newPiece)
     {
         occupiedPiece = newPiece;

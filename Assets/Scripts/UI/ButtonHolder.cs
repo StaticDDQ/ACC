@@ -11,7 +11,7 @@ public class ButtonHolder : MonoBehaviour {
 
 	public void AssignGeneratedPiece(GameObject pieceObj)
     {
-        var details = pieceObj.GetComponent<PiecePosition>().GetLvl1Detail();
+        var details = pieceObj.GetComponent<PiecePosition>().GetPieceDetail();
         piece = pieceObj;
         desc.text = details.effectDesc;
         GetComponent<Image>().sprite = details.portrait;

@@ -7,10 +7,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Transform effect;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float rotSpeed = 2f;
-    [SerializeField] private Image healthBar;
-    [SerializeField] private Text healthText;
     private Rigidbody rb;
-    private int health = 100;
 
     private Vector3 targetPos;
     private Vector3 lookAtTarget;
@@ -21,7 +18,6 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        healthText.text = "100%";
     }
 
     // Update is called once per frame
@@ -64,14 +60,11 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int dmg)
+    private void OnCollisionEnter(Collision collision)
     {
-        health -= dmg;
-        healthBar.fillAmount = health / 100f;
-        healthText.text = health + "%";
-        if(health <= 0)
+        if (collision.gameObject.tag.Equals("wall"))
         {
-            Destroy(gameObject);
+            isMoving = false;
         }
     }
 }
