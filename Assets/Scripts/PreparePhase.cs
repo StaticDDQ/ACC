@@ -38,11 +38,9 @@ public class PreparePhase : MonoBehaviour
                 
             if (!bench.AlocatePiece(removedUnit))
             {
-                removedUnit.GetComponent<PiecePosition>().AssignSpace(null);
-
                 int amount = removedUnit.GetComponent<PiecePosition>().GetPieceDetail().sellingPrice;
                 controller.BuySellPiece(amount);
-                Destroy(removedUnit.gameObject);
+                removedUnit.GetComponent<PiecePosition>().SellPiece();
             }
             else
             {

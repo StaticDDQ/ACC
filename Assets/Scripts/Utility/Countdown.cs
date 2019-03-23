@@ -24,7 +24,7 @@ public class Countdown : MonoBehaviour
         if(timer >= 0.0f)
         {
             timer -= Time.deltaTime;
-            clockText.text = timer.ToString();
+            clockText.text = ((int)timer).ToString();
         } else if(timer < 0.0f)
         {
             timer = 0.0f;
@@ -35,19 +35,19 @@ public class Countdown : MonoBehaviour
                     phaseText.text = "Ready";
                     phaseText.color = Color.yellow;
                     currPhase = Phase.Ready;
-                    ResetTimer(5.0f);
+                    ResetTimer(6.0f);
                     break;
                 case Phase.Ready:
                     phaseText.text = "Battle";
                     phaseText.color = Color.red;
                     currPhase = Phase.Battle;
-                    ResetTimer(60.0f);
+                    ResetTimer(61.0f);
                     break;
                 case Phase.Battle:
                     phaseText.text = "Prepare";
                     phaseText.color = Color.green;
                     currPhase = Phase.Prepare;
-                    ResetTimer(30.0f);
+                    ResetTimer(31.0f);
                     break;
             }
             phaseController.NextPhase(currPhase);

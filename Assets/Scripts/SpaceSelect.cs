@@ -3,9 +3,9 @@
 public class SpaceSelect : MonoBehaviour {
 
     private Camera cam;
-    [SerializeField] private BenchPlacement bench;
 
-    private GameController controller;
+    [SerializeField] private BenchPlacement bench;
+    [SerializeField] private GameController controller;
 
     private bool controlsDisabled = false;
 
@@ -17,7 +17,6 @@ public class SpaceSelect : MonoBehaviour {
     private void Start()
     {
         cam = GetComponent<Camera>();
-        controller = this.GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -73,12 +72,10 @@ public class SpaceSelect : MonoBehaviour {
         }
         else if (selection == SelectPiece.Selling)
         {
-            pieceScript.AssignSpace(null);
-
             int amount = pieceScript.GetPieceDetail().sellingPrice;
             controller.BuySellPiece(amount);
-            Destroy(piece.gameObject);
-
+            print(amount);
+            pieceScript.SellPiece();
         }
         selection = SelectPiece.Idling;
     }

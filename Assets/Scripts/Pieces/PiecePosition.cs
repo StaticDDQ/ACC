@@ -18,6 +18,14 @@ public class PiecePosition : MonoBehaviour {
         if (alocatedSpace != null)
             alocatedSpace.GetComponent<PlaySpace>().AddPiece(null);
         alocatedSpace = space;
+        alocatedSpace.GetComponent<PlaySpace>().AddPiece(gameObject);
+    }
+
+    public void SellPiece()
+    {
+        if(alocatedSpace != null)
+            alocatedSpace.GetComponent<PlaySpace>().AddPiece(null);
+        Destroy(gameObject);
     }
 
     private void OnMouseEnter()
