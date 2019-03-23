@@ -6,6 +6,7 @@ public class ButtonHolder : MonoBehaviour {
     [SerializeField] private Text desc;
     [SerializeField] private BenchPlacement bench;
     [SerializeField] private GameController controller;
+    [SerializeField] private Transform placeHolder;
     private GameObject piece;
     private int price;
 
@@ -22,7 +23,7 @@ public class ButtonHolder : MonoBehaviour {
     {
         if(piece != null && controller.GetGold() >= price)
         {
-            var obj = Instantiate(piece);
+            var obj = Instantiate(piece, placeHolder);
 
             if (bench.AlocatePiece(obj.transform))
             {

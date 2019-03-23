@@ -8,7 +8,9 @@ public class PreparePhase : MonoBehaviour
     [SerializeField] private SpaceController playboard;
     [SerializeField] private BenchPlacement bench;
     [SerializeField] private GameController controller;
+    [SerializeField] private Transform placeHolder;
     private List<Transform> activePieces;
+    private bool hasEnemies = false;
 
     public IEnumerator CommenceReady()
     {
@@ -32,10 +34,10 @@ public class PreparePhase : MonoBehaviour
 
         int unitsToRemove = playboard.ExcessUnits();
 
-        while(unitsToRemove > 0)
+        while (unitsToRemove > 0)
         {
             var removedUnit = activePieces[Random.Range(0, activePieces.Count - 1)];
-                
+
             if (!bench.AlocatePiece(removedUnit))
             {
                 int amount = removedUnit.GetComponent<PiecePosition>().GetPieceDetail().sellingPrice;
@@ -53,13 +55,34 @@ public class PreparePhase : MonoBehaviour
         }
     }
 
+    public void ReceiveEnemyUnits(List<Transform> enemies)
+    {
+        foreach (var enemy in enemies)
+        {
+            var enem = Instantiate(enemy, placeHolder);
+            enem.localPosition = new Vector3(-enem.localPosition.x, enem.localPosition.y, -enem.localPosition.z);
+        }
+    }
+
     public void CommenceBattle()
     {
-
+        //DistributeUnits.instance.SendUnitsToRandomPlayer(activePieces);
+        ReceiveEnemyUnits(activePieces);
     }
 
     public void CommencePrepare()
     {
+        hasEnemies = false;
         spaceSelect.DisableUnitControl(false);
+    }
+
+    public bool GetHasEnemies()
+    {
+        return hasEnemies;
+    }
+
+    public void SetHasEnemies(bool newEnemies)
+    {
+        this.hasEnemies = newEnemies;
     }
 }
