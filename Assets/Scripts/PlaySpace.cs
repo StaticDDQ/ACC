@@ -3,10 +3,10 @@
 public class PlaySpace : MonoBehaviour {
 
     private SpaceController controller;
-    [SerializeField] private GameObject occupiedPiece;
-    private GameObject highlightPanel;
+    protected GameObject occupiedPiece;
+    protected GameObject highlightPanel;
 
-    private void Start()
+    protected void Start()
     {
         highlightPanel = transform.GetChild(0).gameObject;
         controller = transform.parent.GetComponent<SpaceController>();
@@ -19,8 +19,11 @@ public class PlaySpace : MonoBehaviour {
 
         if (occupiedPiece != null)
         {
+            controller.AddUnit(1);
             controller.PieceControl(occupiedPiece);
         }
+        else
+            controller.AddUnit(-1);
     }
 
     public GameObject GetPiece()
@@ -28,12 +31,12 @@ public class PlaySpace : MonoBehaviour {
         return occupiedPiece;
     }
 
-    private void OnMouseEnter()
+    protected void OnMouseEnter()
     {
         highlightPanel.SetActive(true);
     }
 
-    private void OnMouseExit()
+    protected void OnMouseExit()
     {
         highlightPanel.SetActive(false);  
     }

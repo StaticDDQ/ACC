@@ -1,47 +1,28 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
-public enum Phase { Build, Prepare, Play }
+public enum Phase { Prepare, Ready, Battle }
 
 public class PhaseController : MonoBehaviour
 {
-    public static PhaseController instance;
-    [SerializeField] private List<PreparePhase> players;
+    private PreparePhase phase;
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Start()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+        phase = GetComponent<PreparePhase>();
     }
 
     public void NextPhase(Phase nextPhase)
     {
         switch(nextPhase)
         {
+            case Phase.Ready:
+                StartCoroutine(phase.CommenceReady());
+                break;
+            case Phase.Battle:
+                phase.CommenceBattle();
+                break;
             case Phase.Prepare:
-                foreach(PreparePhase player in players)
-                {
-                    StartCoroutine(player.CommencePreparation());
-                }
-                break;
-            case Phase.Play:
-                foreach (PreparePhase player in players)
-                {
-                    player.CommencePlay();
-                }
-                break;
-            case Phase.Build:
-                foreach (PreparePhase player in players)
-                {
-                    player.CommenceBuild();
-                }
+                phase.CommencePrepare();
                 break;
         }
     }

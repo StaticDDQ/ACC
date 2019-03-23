@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+    [SerializeField] private SpaceController spaceController;
     [SerializeField] private ButtonHolder[] pieceSelectors;
     [SerializeField] private Text goldAmt;
     [SerializeField] private Text roundsTxt;
-    [SerializeField] private Text maxUnitTxt;
     [SerializeField] private Text levelTxt;
     [SerializeField] private Image healthBar;
     [SerializeField] private Text healthText;
@@ -25,13 +25,10 @@ public class GameController : MonoBehaviour {
     private int gold = 0;
     private int rounds = 0;
 
-    private int currUnits = 0;
-
     private void Start()
     {
         levelTxt.text = "1";
         healthText.text = "100%";
-        maxUnitTxt.text = "0/1";
 
         NextRound();
     }
@@ -95,24 +92,6 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public int ExcessUnits()
-    {
-        return currUnits - level;
-    }
-
-    public void SetPlayedUnits(int amount)
-    {
-        currUnits += amount;
-        maxUnitTxt.text = currUnits + "/" + level;
-        if(currUnits > level)
-        {
-            maxUnitTxt.color = Color.red;
-        } else
-        {
-            maxUnitTxt.color = Color.white;
-        }
-    }
-
     public void BuySellPiece(int amount)
     {
         gold += amount;
@@ -131,6 +110,8 @@ public class GameController : MonoBehaviour {
         {
             exp -= expCap;
             level++;
+
+            spaceController.AdjustMaxUnits(level);
             levelTxt.text = level + "";
 
             float t = Mathf.Pow(expMod, level);

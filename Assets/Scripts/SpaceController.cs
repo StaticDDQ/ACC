@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpaceController : MonoBehaviour {
 
-    protected List<PlaySpace> spaces;
+    [SerializeField] private Text unitText;
+    private List<PlaySpace> spaces;
+    private int currUnits = 0;
+    private int maxUnits = 1;
 
-    protected void Start()
+    private void Start()
     {
         spaces = new List<PlaySpace>();
 
@@ -46,6 +50,32 @@ public class SpaceController : MonoBehaviour {
 
         if (!noChanges)
             PieceControl(piece);
+    }
+
+    public int ExcessUnits()
+    {
+        return currUnits - maxUnits;
+    }
+
+    public void AddUnit(int unitAmount)
+    {
+        currUnits += unitAmount;
+        SetText();
+    }
+
+    public void AdjustMaxUnits(int newMax)
+    {
+        maxUnits = newMax;
+        SetText();
+    }
+
+    private void SetText()
+    {
+        unitText.text = currUnits + "/" + maxUnits;
+        if (currUnits > maxUnits)
+            unitText.color = Color.red;
+        else
+            unitText.color = Color.white;
     }
 
     public List<PlaySpace> GetSpaces()

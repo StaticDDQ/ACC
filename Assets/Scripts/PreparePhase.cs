@@ -8,40 +8,39 @@ public class PreparePhase : MonoBehaviour
     [SerializeField] private SpaceController playboard;
     [SerializeField] private BenchPlacement bench;
     [SerializeField] private GameController controller;
-    private List<GameObject> activePieces;
+    private List<Transform> activePieces;
 
-    public IEnumerator CommencePreparation()
+    public IEnumerator CommenceReady()
     {
-        spaceSelect.DisableUnitControl(false);
+        spaceSelect.DisableUnitControl(true);
 
         List<PlaySpace> spaces = playboard.GetSpaces();
-        activePieces = new List<GameObject>();
+        activePieces = new List<Transform>();
 
         foreach (PlaySpace space in spaces)
         {
             if (space.GetPiece() != null)
-                activePieces.Add(space.GetPiece());
+                activePieces.Add(space.GetPiece().transform);
         }
 
-        foreach (GameObject piece in activePieces)
+        foreach (Transform piece in activePieces)
         {
             piece.tag = "Untagged";
         }
 
         yield return new WaitForSeconds(1);
 
-        int unitsToRemove = controller.ExcessUnits();
+        int unitsToRemove = playboard.ExcessUnits();
 
         while(unitsToRemove > 0)
         {
-            var removedUnit = activePieces[Random.Range(0, activePieces.Count - 1)].GetComponent<PiecePosition>();
+            var removedUnit = activePieces[Random.Range(0, activePieces.Count - 1)];
                 
             if (!bench.AlocatePiece(removedUnit))
             {
-                if (removedUnit.GetAlocatedSpaceTag().Equals("space"))
-                    controller.SetPlayedUnits(-1);
+                removedUnit.GetComponent<PiecePosition>().AssignSpace(null);
 
-                int amount = removedUnit.GetSellingPrice();
+                int amount = removedUnit.GetComponent<PiecePosition>().GetPieceDetail().sellingPrice;
                 controller.BuySellPiece(amount);
                 Destroy(removedUnit.gameObject);
             }
@@ -49,20 +48,20 @@ public class PreparePhase : MonoBehaviour
             {
                 removedUnit.gameObject.tag = "piece";
             }
-            activePieces.Remove(removedUnit.gameObject);
+            activePieces.Remove(removedUnit);
             unitsToRemove--;
 
             yield return null;
         }
     }
 
-    public void CommencePlay()
+    public void CommenceBattle()
     {
 
     }
 
-    public void CommenceBuild()
+    public void CommencePrepare()
     {
-        spaceSelect.DisableUnitControl(true);
+        spaceSelect.DisableUnitControl(false);
     }
 }

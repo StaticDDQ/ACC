@@ -2,10 +2,13 @@
 
 public class SpaceSelect : MonoBehaviour {
 
-    [SerializeField] private Camera cam;
+    private Camera cam;
     [SerializeField] private BenchPlacement bench;
-    private bool canControl = true;
+
     private GameController controller;
+
+    private bool controlsDisabled = false;
+
     private bool pieceSelected = false;
     private Transform selectedPiece;
 
@@ -13,6 +16,7 @@ public class SpaceSelect : MonoBehaviour {
 
     private void Start()
     {
+        cam = GetComponent<Camera>();
         controller = this.GetComponent<GameController>();
     }
 
@@ -44,13 +48,9 @@ public class SpaceSelect : MonoBehaviour {
                 {
                     ManipulatePiece(hitInfo.transform);
                 }
-                else if (pieceSelected && hitTag.Equals("space"))
+                else if (pieceSelected && (hitTag.Equals("space") || hitTag.Equals("benchSpace")))
                 {
                     UseSpace(hitInfo.transform);
-                }
-                else if (pieceSelected && hitTag.Equals("benchSpace"))
-                {
-                    UseBench(hitInfo.transform);
                 }
             }
         }
@@ -58,26 +58,24 @@ public class SpaceSelect : MonoBehaviour {
 
     private void ManipulatePiece(Transform piece)
     {
-        PiecePosition pieceScript = piece.transform.GetComponent<PiecePosition>();
-        if (selection == SelectPiece.Returning && canControl)
+        PiecePosition pieceScript = piece.GetComponent<PiecePosition>();
+        if (selection == SelectPiece.Returning)
         {
-            if (piece.GetComponent<PiecePosition>().GetAlocatedSpaceTag().Equals("space"))
+            if (!pieceScript.GetAlocatedSpaceTag().Equals("benchSpace"))
             {
-                controller.SetPlayedUnits(-1);
+                bench.AlocatePiece(piece);
             }
-            bench.AlocatePiece(pieceScript);
         }
-        else if (selection == SelectPiece.Moving && canControl)
+        else if (selection == SelectPiece.Moving)
         {
             selectedPiece = piece;
             pieceSelected = true;
         }
         else if (selection == SelectPiece.Selling)
         {
-            if (pieceScript.GetAlocatedSpaceTag().Equals("space"))
-                controller.SetPlayedUnits(-1);
+            pieceScript.AssignSpace(null);
 
-            int amount = pieceScript.GetSellingPrice();
+            int amount = pieceScript.GetPieceDetail().sellingPrice;
             controller.BuySellPiece(amount);
             Destroy(piece.gameObject);
 
@@ -85,31 +83,15 @@ public class SpaceSelect : MonoBehaviour {
         selection = SelectPiece.Idling;
     }
 
-    private void UseBench(Transform bench)
-    {
-        if (selectedPiece.GetComponent<PiecePosition>().RelocatePiece(bench))
-        {
-            pieceSelected = false;
-            selectedPiece = null;
-
-            string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
-
-            if (lastPlacedSpace.Equals("space"))
-                controller.SetPlayedUnits(-1);
-        }
-    }
-
     private void UseSpace(Transform space)
     {
-        string lastPlacedSpace = selectedPiece.GetComponent<PiecePosition>().GetAlocatedSpaceTag();
-
-        if (selectedPiece.GetComponent<PiecePosition>().RelocatePiece(space))
+        if (space.GetComponent<PlaySpace>().GetPiece() == null)
         {
+            selectedPiece.GetComponent<PiecePosition>().AssignSpace(space);
+            selectedPiece.position = space.transform.position + new Vector3(0, 1f, 0);
+
             pieceSelected = false;
             selectedPiece = null;
-
-            if (lastPlacedSpace.Equals("benchSpace"))
-                controller.SetPlayedUnits(1);
         }
     }
 
@@ -130,8 +112,8 @@ public class SpaceSelect : MonoBehaviour {
 
     public void DisableUnitControl(bool isDisabled)
     {
-        canControl = isDisabled;
-        if (!canControl)
+        controlsDisabled = isDisabled;
+        if (controlsDisabled)
         {
             selectedPiece = null;
             pieceSelected = false;

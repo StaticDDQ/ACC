@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Countdown : MonoBehaviour
 {
-    public static Countdown instance;
+    private PhaseController phaseController;
+    [SerializeField] private Text clockText;
+    [SerializeField] private Text phaseText;
 
-    [SerializeField] private float minTimer;
-    private Phase currPhase = Phase.Build;
+    private float minTimer = 30.0f;
+    private Phase currPhase = Phase.Prepare;
 
-    public float timer;
+    private float timer;
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this);
         timer = minTimer;
+        phaseController = GetComponent<PhaseController>();
     }
 
     // Update is called once per frame
@@ -24,26 +24,33 @@ public class Countdown : MonoBehaviour
         if(timer >= 0.0f)
         {
             timer -= Time.deltaTime;
+            clockText.text = timer.ToString();
         } else if(timer < 0.0f)
         {
             timer = 0.0f;
-
+            clockText.text = "0";
             switch (currPhase)
             {
-                case Phase.Build:
-                    currPhase = Phase.Prepare;
+                case Phase.Prepare:
+                    phaseText.text = "Ready";
+                    phaseText.color = Color.yellow;
+                    currPhase = Phase.Ready;
                     ResetTimer(5.0f);
                     break;
-                case Phase.Prepare:
-                    currPhase = Phase.Play;
-                    ResetTimer(30.0f);
+                case Phase.Ready:
+                    phaseText.text = "Battle";
+                    phaseText.color = Color.red;
+                    currPhase = Phase.Battle;
+                    ResetTimer(60.0f);
                     break;
-                case Phase.Play:
-                    currPhase = Phase.Build;
+                case Phase.Battle:
+                    phaseText.text = "Prepare";
+                    phaseText.color = Color.green;
+                    currPhase = Phase.Prepare;
                     ResetTimer(30.0f);
                     break;
             }
-            PhaseController.instance.NextPhase(currPhase);
+            phaseController.NextPhase(currPhase);
         }
     }
 

@@ -24,11 +24,11 @@ public class ButtonHolder : MonoBehaviour {
         {
             var obj = Instantiate(piece);
 
-            if (bench.AlocatePiece(obj.GetComponent<PiecePosition>()))
+            if (bench.AlocatePiece(obj.transform))
             {
                 piece = null;
                 desc.text = "";
-                GetComponent<Button>().image = null;
+                GetComponent<Image>().sprite = null;
                 controller.BuySellPiece(-price);
             } else
             {

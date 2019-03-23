@@ -14,6 +14,7 @@ public class PieceDetail : ScriptableObject {
     public int armor;
 
     public int price;
+    public int sellingPrice;
 
     public float atkSpeed;
     public float moveSpeed;
