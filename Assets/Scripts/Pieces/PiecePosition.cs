@@ -3,8 +3,6 @@
 public class PiecePosition : MonoBehaviour {
 
     [SerializeField] private PieceDetail lvl1;
-    [SerializeField] private PieceDetail lvl2;
-    [SerializeField] private PieceDetail lvl3;
     private Transform alocatedSpace;
     private ParticleSystem system;
 
@@ -21,7 +19,7 @@ public class PiecePosition : MonoBehaviour {
         alocatedSpace.GetComponent<PlaySpace>().AddPiece(gameObject);
     }
 
-    public void SellPiece()
+    public void RemovePiece()
     {
         if(alocatedSpace != null)
             alocatedSpace.GetComponent<PlaySpace>().AddPiece(null);

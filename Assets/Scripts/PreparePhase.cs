@@ -42,7 +42,7 @@ public class PreparePhase : MonoBehaviour
             {
                 int amount = removedUnit.GetComponent<PiecePosition>().GetPieceDetail().sellingPrice;
                 controller.BuySellPiece(amount);
-                removedUnit.GetComponent<PiecePosition>().SellPiece();
+                removedUnit.GetComponent<PiecePosition>().RemovePiece();
             }
             else
             {

@@ -8,6 +8,7 @@ TagManager:
   - piece
   - benchSpace
   - wall
+  - enemyPiece
   layers:
   - Default
   - TransparentFX

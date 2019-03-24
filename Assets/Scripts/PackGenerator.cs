@@ -25,7 +25,19 @@ public class PackGenerator : MonoBehaviour {
     }
 
     public PieceRarity[] rarities;
-    public static PackGenerator instance;
+    private static PackGenerator instance = null;
+    private static object padlock = new object();
+    public static PackGenerator Instance {
+        get
+        {
+            lock (padlock)
+            {
+                if (instance == null)
+                    instance = new PackGenerator();
+                return instance;
+            }
+        }
+    }
 
 	// Use this for initialization
 	void Awake () {

@@ -85,7 +85,7 @@ public class GameController : MonoBehaviour {
 
     private void SetPieceSelectors()
     {
-        GameObject[] pack = PackGenerator.instance.RequestPack(level);
+        GameObject[] pack = PackGenerator.Instance.RequestPack(level);
         for (int i = 0; i < 5; i++)
         {
             pieceSelectors[i].AssignGeneratedPiece(pack[i]);

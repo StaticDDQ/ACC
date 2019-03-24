@@ -74,8 +74,7 @@ public class SpaceSelect : MonoBehaviour {
         {
             int amount = pieceScript.GetPieceDetail().sellingPrice;
             controller.BuySellPiece(amount);
-            print(amount);
-            pieceScript.SellPiece();
+            pieceScript.RemovePiece();
         }
         selection = SelectPiece.Idling;
     }

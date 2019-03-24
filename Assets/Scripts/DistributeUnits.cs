@@ -6,6 +6,7 @@ public class DistributeUnits : MonoBehaviour
     public static DistributeUnits instance;
     [SerializeField] private List<PreparePhase> players;
     private PreparePhase player;
+
     // Start is called before the first frame update
     void Start()
     {
