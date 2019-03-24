@@ -61,6 +61,8 @@ public class PreparePhase : MonoBehaviour
         {
             var enem = Instantiate(enemy, placeHolder);
             enem.localPosition = new Vector3(-enem.localPosition.x, enem.localPosition.y, -enem.localPosition.z);
+            enem.tag = "enemyPiece";
+            enem.GetComponent<PieceBehaviour>().enabled = true;
         }
     }
 
@@ -68,6 +70,10 @@ public class PreparePhase : MonoBehaviour
     {
         //DistributeUnits.instance.SendUnitsToRandomPlayer(activePieces);
         ReceiveEnemyUnits(activePieces);
+        foreach(var units in activePieces)
+        {
+            units.GetComponent<PieceBehaviour>().enabled = true;
+        }
     }
 
     public void CommencePrepare()

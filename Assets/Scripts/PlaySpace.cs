@@ -4,11 +4,14 @@ public class PlaySpace : MonoBehaviour {
 
     [SerializeField] private SpaceController controller;
     protected GameObject occupiedPiece;
-    protected GameObject highlightPanel;
+    protected Material mat;
+    [SerializeField] protected Color newColor;
+    protected Color oriColor;
 
     protected void Start()
     {
-        highlightPanel = transform.GetChild(0).gameObject;
+        mat = GetComponent<Renderer>().material;
+        oriColor = mat.color;
     }
 
     // Assign piece to this space, afterwards notify parent if piece can be evolved
@@ -31,11 +34,11 @@ public class PlaySpace : MonoBehaviour {
 
     protected void OnMouseEnter()
     {
-        highlightPanel.SetActive(true);
+        mat.color = newColor;
     }
 
     protected void OnMouseExit()
     {
-        highlightPanel.SetActive(false);  
+        mat.color = oriColor;
     }
 }
