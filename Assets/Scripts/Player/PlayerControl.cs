@@ -19,6 +19,10 @@ public class PlayerControl : MonoBehaviour
         {
             SetTargetPosition();
         }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            isMoving = false;
+        }
         if(isMoving)
             MovePlayer();
     }

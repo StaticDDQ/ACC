@@ -9,6 +9,8 @@ TagManager:
   - benchSpace
   - wall
   - enemyPiece
+  - playPiece
+  - pieceView
   layers:
   - Default
   - TransparentFX

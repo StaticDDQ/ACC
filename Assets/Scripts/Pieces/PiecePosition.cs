@@ -4,12 +4,6 @@ public class PiecePosition : MonoBehaviour {
 
     [SerializeField] private PieceDetail lvl1;
     private Transform alocatedSpace;
-    private ParticleSystem system;
-
-    private void Start()
-    {
-        system = transform.GetChild(0).GetComponent<ParticleSystem>();
-    }
 
     public void AssignSpace(Transform space)
     {
@@ -24,16 +18,6 @@ public class PiecePosition : MonoBehaviour {
         if(alocatedSpace != null)
             alocatedSpace.GetComponent<PlaySpace>().AddPiece(null);
         Destroy(gameObject);
-    }
-
-    private void OnMouseEnter()
-    {
-        system.Play();
-    }
-
-    private void OnMouseExit()
-    {
-        system.Stop();
     }
 
     public void UpgradePiece()

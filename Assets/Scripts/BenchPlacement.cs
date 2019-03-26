@@ -3,20 +3,7 @@ using UnityEngine;
 
 public class BenchPlacement : MonoBehaviour {
 
-    private List<PlaySpace> spaces;
-
-    private void Start()
-    {
-        spaces = new List<PlaySpace>();
-
-        foreach (Transform child in transform)
-        {
-            if (child.GetComponent<PlaySpace>() != null)
-            {
-                spaces.Add(child.GetComponent<PlaySpace>());
-            }
-        }
-    }
+    [SerializeField] private List<PlaySpace> spaces;
 
     public bool AlocatePiece(Transform piece)
     {

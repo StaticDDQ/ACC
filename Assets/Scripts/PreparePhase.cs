@@ -11,6 +11,7 @@ public class PreparePhase : MonoBehaviour
     [SerializeField] private Transform placeHolder;
     private List<Transform> activePieces;
     private bool hasEnemies = false;
+    private float order = 0f;
 
     public IEnumerator CommenceReady()
     {
@@ -27,7 +28,7 @@ public class PreparePhase : MonoBehaviour
 
         foreach (Transform piece in activePieces)
         {
-            piece.tag = "Untagged";
+            piece.tag = "playPiece";
         }
 
         yield return new WaitForSeconds(1);
@@ -57,23 +58,31 @@ public class PreparePhase : MonoBehaviour
 
     public void ReceiveEnemyUnits(List<Transform> enemies)
     {
+        order = 0.0f;
+        int count = activePieces.Count + enemies.Count;
+        float waitTime = 0.25f;
+        foreach (var units in activePieces)
+        {
+            units.GetComponent<FindTarget>().PlayUnit(order, count * waitTime);
+            order += 0.25f;
+        }
+
         foreach (var enemy in enemies)
         {
             var enem = Instantiate(enemy, placeHolder);
             enem.localPosition = new Vector3(-enem.localPosition.x, enem.localPosition.y, -enem.localPosition.z);
             enem.tag = "enemyPiece";
-            enem.GetComponent<PieceBehaviour>().enabled = true;
+            enem.GetComponent<FindTarget>().PlayUnit(order, count * waitTime);
+
+            order += 0.25f;
         }
     }
 
     public void CommenceBattle()
     {
         //DistributeUnits.instance.SendUnitsToRandomPlayer(activePieces);
+
         ReceiveEnemyUnits(activePieces);
-        foreach(var units in activePieces)
-        {
-            units.GetComponent<PieceBehaviour>().enabled = true;
-        }
     }
 
     public void CommencePrepare()
