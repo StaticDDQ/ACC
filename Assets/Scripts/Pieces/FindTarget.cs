@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class FindTarget : MonoBehaviour
 {
+    [SerializeField] private Transform model;
     [SerializeField] private List<PieceView> views;
     [SerializeField] private ParticleSystem system;
+    [HideInInspector]
     public Transform target;
 
     private bool canPlay = false;
@@ -47,6 +49,7 @@ public class FindTarget : MonoBehaviour
                 }
                 waitTime = 0f;
             }
+            model.LookAt(target);
         }
     }
 
