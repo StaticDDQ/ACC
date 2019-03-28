@@ -10,7 +10,9 @@ public class PreparePhase : MonoBehaviour
     [SerializeField] private GameController controller;
     [SerializeField] private Transform placeHolder;
     private List<Transform> activePieces;
+    private List<Transform> enemyPieces;
     private bool hasEnemies = false;
+    private bool gameFinished = true;
     private float order = 0f;
 
     public IEnumerator CommenceReady()
@@ -58,12 +60,13 @@ public class PreparePhase : MonoBehaviour
 
     public void ReceiveEnemyUnits(List<Transform> enemies)
     {
+        enemyPieces = enemies;
         order = 0.0f;
         int count = activePieces.Count + enemies.Count;
         float waitTime = 0.25f;
         foreach (var units in activePieces)
         {
-            units.GetComponent<FindTarget>().PlayUnit(order, count * waitTime);
+            units.GetComponent<FindTarget>().PlayUnit(order, count * waitTime, this);
             order += 0.25f;
         }
 
@@ -72,14 +75,35 @@ public class PreparePhase : MonoBehaviour
             var enem = Instantiate(enemy, placeHolder);
             enem.localPosition = new Vector3(-enem.localPosition.x, enem.localPosition.y, -enem.localPosition.z);
             enem.tag = "enemyPiece";
-            enem.GetComponent<FindTarget>().PlayUnit(order, count * waitTime);
+            enem.GetComponent<FindTarget>().PlayUnit(order, count * waitTime, this);
 
             order += 0.25f;
         }
     }
 
+    public void PieceDefeated(Transform piece, bool isEnemy)
+    {
+        if (isEnemy)
+            enemyPieces.Remove(piece);
+        else
+            activePieces.Remove(piece);
+
+        if(enemyPieces.Count == 0 && activePieces.Count >= 0)
+        {
+            gameFinished = true;
+        } else if(activePieces.Count == 0 && enemyPieces.Count > 0)
+        {
+            foreach(var enemy in enemyPieces)
+            {
+                controller.TakeDamage(enemy.GetComponent<FindTarget>().damageDealt);
+            }
+            gameFinished = true;
+        }
+    }
+
     public void CommenceBattle()
     {
+        gameFinished = false;
         //DistributeUnits.instance.SendUnitsToRandomPlayer(activePieces);
 
         ReceiveEnemyUnits(activePieces);

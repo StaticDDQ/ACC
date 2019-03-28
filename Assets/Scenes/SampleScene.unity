@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 226640fa85e3f574283a90227dc950dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spaceController: {fileID: 0}
+  spaceController: {fileID: 1770041284}
   pieceSelectors:
   - {fileID: 1424039564}
   - {fileID: 68562054}
@@ -4471,7 +4471,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!54 &1164577459
 Rigidbody:
   m_ObjectHideFlags: 0

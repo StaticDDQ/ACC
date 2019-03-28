@@ -6,17 +6,27 @@ public class FindTarget : MonoBehaviour
     [SerializeField] private Transform model;
     [SerializeField] private List<PieceView> views;
     [SerializeField] private ParticleSystem system;
+    [SerializeField] private PieceDetail detail;
+
     [HideInInspector]
     public Transform target;
+    [HideInInspector]
+    public int damageDealt;
 
     private bool canPlay = false;
     private bool attackTarget = false;
 
+    private float attackTime = 0f;
     private float waitTime = 0f;
     private float elapsed = 1f;
 
-    public void PlayUnit(float order, float downTime)
+    private int health;
+    private PreparePhase currPhase;
+
+    public void PlayUnit(float order, float downTime, PreparePhase phase)
     {
+        currPhase = phase;
+        health = detail.health;
         canPlay = true;
         waitTime -= order;
         elapsed = downTime;
@@ -50,6 +60,26 @@ public class FindTarget : MonoBehaviour
                 waitTime = 0f;
             }
             model.LookAt(target);
+
+            if (attackTarget)
+            {
+                attackTime += Time.deltaTime;
+                if(attackTime > detail.atkSpeed)
+                {
+                    attackTime = 0f;
+                    target.GetComponent<FindTarget>().TakeDamage(detail.damage);
+                }
+            }
+        }
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        health -= dmg;
+        if(health <= 0)
+        {
+            currPhase.PieceDefeated(transform, tag.Equals("enemyPiece"));
+            Destroy(this.gameObject);
         }
     }
 
