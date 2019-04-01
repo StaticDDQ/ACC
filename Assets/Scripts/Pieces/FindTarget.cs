@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class FindTarget : MonoBehaviour
 {
     [SerializeField] private Transform model;
-    [SerializeField] private List<PieceView> views;
+    [SerializeField] private List<PieceViewRange> views;
     [SerializeField] private ParticleSystem system;
     [SerializeField] private Image healthBar;
     [SerializeField] private Image manaBar;
@@ -108,10 +108,16 @@ public class FindTarget : MonoBehaviour
 
     private Vector3 GetPath(Vector3 pos)
     {
-        PieceView bestView = null;
+        PieceViewRange bestView = null;
         float dist = 10000f;
         foreach (var view in views)
         {
+            if (view.foundTarget)
+            {
+                attackTarget = true;
+                return transform.position;
+            }
+
             if (!view.isOccupied)
             {
                 var diff = Vector3.Distance(view.transform.position, pos);
@@ -120,10 +126,6 @@ public class FindTarget : MonoBehaviour
                     bestView = view;
                     dist = diff;
                 }
-            } else if (view.foundTarget)
-            {
-                attackTarget = true;
-                return transform.position;
             }
         }
 

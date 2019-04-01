@@ -49,7 +49,7 @@ public class PackGenerator : MonoBehaviour {
 	
     private GameObject GetRandomPiece(int level)
     {
-        return s1[0];
+        return s1[UnityEngine.Random.Range(0, s1.Length)];
     }
 
 	public GameObject[] RequestPack(int level)
