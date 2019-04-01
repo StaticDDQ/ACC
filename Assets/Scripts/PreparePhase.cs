@@ -12,7 +12,6 @@ public class PreparePhase : MonoBehaviour
     private List<Transform> activePieces;
     private List<Transform> enemyPieces;
     private bool hasEnemies = false;
-    private bool gameFinished = true;
     private float order = 0f;
 
     public IEnumerator CommenceReady()
@@ -90,20 +89,20 @@ public class PreparePhase : MonoBehaviour
 
         if(enemyPieces.Count == 0 && activePieces.Count >= 0)
         {
-            gameFinished = true;
+            DistributeUnits.instance.PlayerFinished();
+
         } else if(activePieces.Count == 0 && enemyPieces.Count > 0)
         {
             foreach(var enemy in enemyPieces)
             {
                 controller.TakeDamage(enemy.GetComponent<FindTarget>().damageDealt);
             }
-            gameFinished = true;
+            DistributeUnits.instance.PlayerFinished();
         }
     }
 
     public void CommenceBattle()
     {
-        gameFinished = false;
         //DistributeUnits.instance.SendUnitsToRandomPlayer(activePieces);
 
         ReceiveEnemyUnits(activePieces);
