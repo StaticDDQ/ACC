@@ -27,31 +27,35 @@ public class Countdown : MonoBehaviour
             clockText.text = ((int)timer).ToString();
         } else if(timer < 0.0f)
         {
-            timer = 0.0f;
             clockText.text = "0";
-            switch (currPhase)
-            {
-                case Phase.Prepare:
-                    phaseText.text = "Ready";
-                    phaseText.color = Color.yellow;
-                    currPhase = Phase.Ready;
-                    ResetTimer(6.0f);
-                    break;
-                case Phase.Ready:
-                    phaseText.text = "Battle";
-                    phaseText.color = Color.red;
-                    currPhase = Phase.Battle;
-                    ResetTimer(61.0f);
-                    break;
-                case Phase.Battle:
-                    phaseText.text = "Prepare";
-                    phaseText.color = Color.green;
-                    currPhase = Phase.Prepare;
-                    ResetTimer(31.0f);
-                    break;
-            }
-            phaseController.NextPhase(currPhase);
+            NextPhase();
         }
+    }
+
+    public void NextPhase()
+    {
+        switch (currPhase)
+        {
+            case Phase.Prepare:
+                phaseText.text = "Ready";
+                phaseText.color = Color.yellow;
+                currPhase = Phase.Ready;
+                ResetTimer(6.0f);
+                break;
+            case Phase.Ready:
+                phaseText.text = "Battle";
+                phaseText.color = Color.red;
+                currPhase = Phase.Battle;
+                ResetTimer(61.0f);
+                break;
+            case Phase.Battle:
+                phaseText.text = "Prepare";
+                phaseText.color = Color.green;
+                currPhase = Phase.Prepare;
+                ResetTimer(31.0f);
+                break;
+        }
+        phaseController.NextPhase(currPhase);
     }
 
     private void ResetTimer(float newTimer)

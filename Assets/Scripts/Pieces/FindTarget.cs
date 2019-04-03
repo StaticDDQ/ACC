@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FindTarget : MonoBehaviour
 {
     [SerializeField] private Transform model;
-    [SerializeField] private List<PieceView> views;
+    [SerializeField] private List<PieceViewRange> views;
     [SerializeField] private ParticleSystem system;
+    [SerializeField] private Image healthBar;
+    [SerializeField] private Image manaBar;
     [SerializeField] private PieceDetail detail;
 
     [HideInInspector]
@@ -20,7 +23,7 @@ public class FindTarget : MonoBehaviour
     private float waitTime = 0f;
     private float elapsed = 1f;
 
-    private int health;
+    private float health;
     private PreparePhase currPhase;
 
     public void PlayUnit(float order, float downTime, PreparePhase phase)
@@ -67,28 +70,54 @@ public class FindTarget : MonoBehaviour
                 if(attackTime > detail.atkSpeed)
                 {
                     attackTime = 0f;
-                    target.GetComponent<FindTarget>().TakeDamage(detail.damage);
+                    DealDamage(detail.damage);
                 }
             }
         }
     }
 
-    public void TakeDamage(int dmg)
+    private void DealDamage(float dmg)
+    {
+        target.GetComponent<FindTarget>().TakeDamage(dmg);
+        manaBar.fillAmount += (dmg * 0.2f) * 0.01f;
+
+        if(manaBar.fillAmount == 1)
+        {
+            //GetComponent<UltimateCast>().Cast();
+        }
+    }
+
+    public void TakeDamage(float dmg)
     {
         health -= dmg;
+        healthBar.fillAmount = health / detail.health;
+        manaBar.fillAmount += (dmg * 0.2f) * 0.01f;
         if(health <= 0)
         {
             currPhase.PieceDefeated(transform, tag.Equals("enemyPiece"));
             Destroy(this.gameObject);
         }
+
+        if (manaBar.fillAmount == 1)
+        {
+            //GetComponent<UltimateCast>().Cast();
+        }
     }
+
+
 
     private Vector3 GetPath(Vector3 pos)
     {
-        PieceView bestView = null;
+        PieceViewRange bestView = null;
         float dist = 10000f;
         foreach (var view in views)
         {
+            if (view.foundTarget)
+            {
+                attackTarget = true;
+                return transform.position;
+            }
+
             if (!view.isOccupied)
             {
                 var diff = Vector3.Distance(view.transform.position, pos);
@@ -97,10 +126,6 @@ public class FindTarget : MonoBehaviour
                     bestView = view;
                     dist = diff;
                 }
-            } else if (view.foundTarget)
-            {
-                attackTarget = true;
-                return transform.position;
             }
         }
 

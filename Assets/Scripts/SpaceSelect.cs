@@ -6,7 +6,8 @@ public class SpaceSelect : MonoBehaviour {
 
     [SerializeField] private BenchPlacement bench;
     [SerializeField] private GameController controller;
-
+    [SerializeField] private PieceInformation informer;
+   
     private bool controlsDisabled = false;
 
     private bool pieceSelected = false;
@@ -34,6 +35,7 @@ public class SpaceSelect : MonoBehaviour {
         } else if (Input.GetKeyDown(KeyCode.Escape))
         {
             selection = SelectPiece.Idling;
+            informer.RemoveDisplay();
         }
 
         RaycastHit hitInfo = new RaycastHit();
@@ -43,7 +45,11 @@ public class SpaceSelect : MonoBehaviour {
             {
                 string hitTag = hitInfo.transform.tag;
 
-                if (hitTag.Equals("piece") && !pieceSelected)
+                if ((hitTag.Equals("piece") || hitTag.Equals("playPiece")) && selection == SelectPiece.Idling)
+                {
+                    informer.DisplayPiece(hitInfo.transform.GetComponent<PiecePosition>().GetPieceDetail());
+                }
+                else if (hitTag.Equals("piece") && !pieceSelected)
                 {
                     ManipulatePiece(hitInfo.transform);
                 }
